@@ -1,0 +1,106 @@
+div.container, section{
+  margin-bottom: 20px;
+}
+
+div.required{
+  padding: 0px 15px 5px 15px;
+  margin-left: 15px;
+}
+
+.alphabet{
+  ime-mode: disabled;
+}
+
+h2{
+  padding-bottom: 7px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+#email_confirm{
+  font-size: 230%;
+  font-family: monospace;
+}
+
+#cc_number{
+  background-image: none;
+  background-position: 97% 50%;
+  background-repeat: no-repeat;
+}
+
+#cc_holder{
+  text-transform: uppercase;
+}
+
+span.label{
+  margin-right: 1em;
+}
+
+div.form-group div.continue{
+  float: left;
+}
+
+div.input-group{
+  padding: 0px 15px !important;
+}
+
+.ui-widget-content{
+  border-color: #ccc;
+}
+
+.ui-widget-content td.ui-datepicker-today span{
+  background: rgba(255, 165, 0, 0.4) none;
+}
+
+/* Button with Tochiku color */
+.btn-tochiku-color {
+  background: rgb(136, 0, 0);
+  color: #57450;
+  border: none;
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+.btn-tochiku-color:hover, .btn-yellow:focus {
+  background: rgb(252, 255, 179);
+}
+.btn-tochiku-color:active {
+  background: rgb(247, 255, 71);
+}
+
+/* Additional style for StripeElement */
+/*
+.StripeElement {
+  color: #a94442;
+  background-color: #ffe7e7;
+  border-color: #ebccd1;
+}
+*/
+
+.StripeElement--focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+/*
+.StripeElement--invalid  {
+  border-color: #a94442;
+}
+
+.StripeElement--complete {
+  border-color: #3c763d;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+*/
+
+@media (max-width: 768px){
+  .continue,
+  .datepicker{
+    margin-bottom: 4px;
+  }
+}

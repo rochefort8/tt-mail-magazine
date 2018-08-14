@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>東京東筑会メールマガジン</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jquery/Bootstrap/Stripe -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="javascripts/jquery.blockUI.js"></script>
+<script src="javascripts/validator.js"></script>
+<script src="javascripts/stripe.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.288.0.min.js"></script>
+<script src="javascripts/base64.min.js"></script>
+
+<script type="text/javascript" src="//jpostal-1006.appspot.com/jquery.jpostal.js"></script>
+
+<!--[if lt IE 9]><script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="stylesheets/style.css" type="text/css">
+</head>
+
+<body>
+<script>
+$(function () {
+    $('#zip').jpostal({
+        postcode : [
+            '#zip'
+        ],
+        address : {
+            '#pref' : '%3',
+            '#address' : '%4%5'
+        }
+    });
+});
+</script>
+
+<div class="container">
+
+<div class="jumbotron">
+<h2><p class="text-center">東京東筑会</p>
+<p class="text-center"><span id="fiscal-year">2018</span>メールマガジン登録・解除</p></h2>
+</div>
+
+<!-- Fiscal Year -->
+<script>
+    var today = new Date();
+    var curMonth = today.getMonth();
+    var fiscalYear = "";
+    if (curMonth >= 3) { // Month starts from 0 to 11....
+        fiscalYear = today.getFullYear().toString();
+    } else {
+        fiscalYear = (today.getFullYear() - 1).toString() ;
+    }
+    var p = document.getElementById('fiscal-year');
+    p.innerHTML = fiscalYear ;
+</script>
+
+<!-- Payment form  -->
+<form class="form-horizontal" role="form" id="registration-form" data-toggle="validator">
+
+<section class="contact">
+<h2>登録</h2>
+
+  <div class="form-group has-feedback">
+    <label for="email" class="col-sm-2 control-label">メールアドレス</label>
+    <div class="col-sm-6">
+      <input type="email" class="form-control alphabet" name="email" id="email" placeholder="yoki-kana@tochiku.com" pattern="^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$" x-autocompletetype="email" required>
+    </div>
+  </div>
+  <div class="form-group has-feedback">
+    <label for="name_kanji_family" class="col-sm-2 control-label">お名前（漢字）</label>
+    <div class="input-group col-sm-3 continue">
+      <span class="input-group-addon">姓</span>
+      <input type="text" class="form-control" name="name_kanji_family" id="name_kanji_family" placeholder="" x-autocompletetype="surname" required>
+    </div>
+    <div class="input-group col-sm-3">
+      <span class="input-group-addon">名</span>
+      <input type="text" class="form-control" name="name_kanji_given" id="name_kanji_given" placeholder="" x-autocompletetype="given-name" required>
+    </div>
+  </div>
+
+  <div class="form-group has-feedback">
+    <label for="graduate" class="col-sm-2 control-label">卒業期</label>
+    <div class="col-sm-6">
+      <select name="graduate" id="graduate" class="form-control" x-autocompletetype="region">
+      <option value="" selected="selected">-- 卒業期 --</option>
+<option value="40">40期(1942年/昭和17年卒)</option>
+<option value="41">41期(1943年/昭和18年卒)</option>
+<option value="42">42期(1944年/昭和19年卒)</option>
+<option value="43">43期(1945年/昭和20年卒)</option>
+<option value="44">44期(1946年/昭和21年卒)</option>
+<option value="45">45期(1947年/昭和22年卒)</option>
+<option value="46">46期(1948年/昭和23年卒)</option>
+<option value="47">47期(1949年/昭和24年卒)</option>
+<option value="48">48期(1950年/昭和25年卒)</option>
+<option value="49">49期(1951年/昭和26年卒)</option>
+<option value="50">50期(1952年/昭和27年卒)</option>
+<option value="51">51期(1953年/昭和28年卒)</option>
+<option value="52">52期(1954年/昭和29年卒)</option>
+<option value="53">53期(1955年/昭和30年卒)</option>
+<option value="54">54期(1956年/昭和31年卒)</option>
+<option value="55">55期(1957年/昭和32年卒)</option>
+<option value="56">56期(1958年/昭和33年卒)</option>
+<option value="57">57期(1959年/昭和34年卒)</option>
+<option value="58">58期(1960年/昭和35年卒)</option>
+<option value="59">59期(1961年/昭和36年卒)</option>
+<option value="60">60期(1962年/昭和37年卒)</option>
+<option value="61">61期(1963年/昭和38年卒)</option>
+<option value="62">62期(1964年/昭和39年卒)</option>
+<option value="63">63期(1965年/昭和40年卒)</option>
+<option value="64">64期(1966年/昭和41年卒)</option>
+<option value="65">65期(1967年/昭和42年卒)</option>
+<option value="66">66期(1968年/昭和43年卒)</option>
+<option value="67">67期(1969年/昭和44年卒)</option>
+<option value="68">68期(1970年/昭和45年卒)</option>
+<option value="69">69期(1971年/昭和46年卒)</option>
+<option value="70">70期(1972年/昭和47年卒)</option>
+<option value="71">71期(1973年/昭和48年卒)</option>
+<option value="72">72期(1974年/昭和49年卒)</option>
+<option value="73">73期(1975年/昭和50年卒)</option>
+<option value="74">74期(1976年/昭和51年卒)</option>
+<option value="75">75期(1977年/昭和52年卒)</option>
+<option value="76">76期(1978年/昭和53年卒)</option>
+<option value="77">77期(1979年/昭和54年卒)</option>
+<option value="78">78期(1980年/昭和55年卒)</option>
+<option value="79">79期(1981年/昭和56年卒)</option>
+<option value="80">80期(1982年/昭和57年卒)</option>
+<option value="81">81期(1983年/昭和58年卒)</option>
+<option value="82">82期(1984年/昭和59年卒)</option>
+<option value="83">83期(1985年/昭和60年卒)</option>
+<option value="84">84期(1986年/昭和61年卒)</option>
+<option value="85">85期(1987年/昭和62年卒)</option>
+<option value="86">86期(1988年/昭和63年卒)</option>
+<option value="87">87期(1989年/平成1年卒)</option>
+<option value="88">88期(1990年/平成2年卒)</option>
+<option value="89">89期(1991年/平成3年卒)</option>
+<option value="90">90期(1992年/平成4年卒)</option>
+<option value="91">91期(1993年/平成5年卒)</option>
+<option value="92">92期(1994年/平成6年卒)</option>
+<option value="93">93期(1995年/平成7年卒)</option>
+<option value="94">94期(1996年/平成8年卒)</option>
+<option value="95">95期(1997年/平成9年卒)</option>
+<option value="96">96期(1998年/平成10年卒)</option>
+<option value="97">97期(1999年/平成11年卒)</option>
+<option value="98">98期(2000年/平成12年卒)</option>
+<option value="99">99期(2001年/平成13年卒)</option>
+<option value="100">100期(2002年/平成14年卒)</option>
+<option value="101">101期(2003年/平成15年卒)</option>
+<option value="102">102期(2004年/平成16年卒)</option>
+<option value="103">103期(2005年/平成17年卒)</option>
+<option value="104">104期(2006年/平成18年卒)</option>
+<option value="105">105期(2007年/平成19年卒)</option>
+<option value="106">106期(2008年/平成20年卒)</option>
+<option value="107">107期(2009年/平成21年卒)</option>
+<option value="108">108期(2010年/平成22年卒)</option>
+<option value="109">109期(2011年/平成23年卒)</option>
+<option value="110">110期(2012年/平成24年卒)</option>
+<option value="111">111期(2013年/平成25年卒)</option>
+<option value="112">112期(2014年/平成26年卒)</option>
+<option value="113">113期(2015年/平成27年卒)</option>
+<option value="114">114期(2016年/平成28年卒)</option>
+<option value="115">115期(2017年/平成29年卒)</option>
+<option value="116">116期(2018年/平成30年卒)</option>
+<option value="0">不明</option>
+<option value="-1">非卒業生</option>
+      </select>
+    </div>
+  </div>
+
+
+</section>
+
+<nav class="col-sm-10" role="navigation">
+<button type="submit" id="submit" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-chevron-right"></span>登録する</button>
+</nav>
+</form>
+
+<br>
+<br>
+<br>
+<br>
+
+<form class="form-horizontal" role="form" id="delete-form" data-toggle="validator">
+<section class="contact">
+<h2>解除</h2>
+
+
+  <div class="form-group has-feedback">
+    <label for="email" class="col-sm-2 control-label">メールアドレス</label>
+    <div class="col-sm-6">
+      <input type="email" class="form-control alphabet" name="email2" id="email2" placeholder="yoki-kana@tochiku.com" pattern="^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$" x-autocompletetype="email" required>
+    </div>
+  </div>
+</section>
+
+<nav class="col-sm-10" role="navigation">
+<button type="submit" id="submit-r" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-chevron-right"></span>解除する</button>
+</nav>
+</form>
+
+<!-- Now processing -->
+<div id="tallContent" style="display:none">
+  <p><img src="images/now-loading.svg" class="img-responsive center-block">></p>
+</div>
+
+<!-- Thanks page -->
+<div id="thanks" style="display:none">
+  <h3><p class="text-center" id="thanks-to"></p></h3>
+  <p id="thanks-to-body"></p>
+  <img src="images/tochikun_01.png" class="img-responsive center-block">
+      <nav class="col-sm-20" role="navigation">
+      <a href=./index.html type="button" class="btn btn-default btn-lg btn-block"><span class="glyphicon glyphicon-chevron-left"></span> メルマガ登録・解除フォームに戻る</button>
+      <a href="https://tochikukai.com" type="button" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-chevron-right"></span> 東京東筑会ホームページへ</a>
+      </nav>
+    </div>
+</div> <!-- container -->
+
+<!-- Thanks page -->
+<div id="payment-error" style="display:none">
+  <h1> 決裁できませんでした。</h1>
+</div>
+
+</div> <!-- container -->
+
+</body>
+</html>

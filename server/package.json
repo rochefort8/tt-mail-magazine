@@ -1,0 +1,14 @@
+{
+  "name": "tt-mail-magazine",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@google-cloud/datastore": "^1.4.1",
+    "aws-sdk": "^2.290.0",
+    "debug": "~2.6.9",
+    "dotenv": "^4.0.0",
+    "mailgun-js": "^0.20.0",
+    "mongodb": "^3.1.1",
+    "request": "^2.67.0"
+  }
+}
