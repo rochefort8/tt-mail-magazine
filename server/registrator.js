@@ -56,7 +56,7 @@ Registrator.requestRegistration = async function(email,last_name,first_name) {
 	console.log("Same key exist");
 	await db.delete(key);
     }
-    var key = await db.put(email,last_name,first_name,'delete');
+    var key = await db.put(email,last_name,first_name,'register');
     ve.send(email,last_name,url_base + 'registration=' + key);
     result.status = 'success';
     result.message = 'new';
@@ -122,7 +122,7 @@ Registrator.requestDelete = async function(email) {
 	console.log("Same key exist");
 	await db.delete(key);
     }
-    var key = await db.put(email,last_name,first_name,'register');
+    var key = await db.put(email,last_name,first_name,'delete');
     ve.send(email,last_name,url_base + 'delete=' + key);
     result.status = 'success';
     result.message = 'new';

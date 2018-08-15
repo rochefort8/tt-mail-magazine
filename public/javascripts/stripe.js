@@ -154,6 +154,7 @@ function onSubmit(lambda) {
 		    if (data.message == 'data-exists') {
 			message = loadMessage('registration-data-exists');
 		    }
+		    message.replace('{MAIL_ADDRESS}',email);
 		    document.getElementById("thanks-to-body").textContent = message;
 		    $('#thanks').show();
 
@@ -180,18 +181,22 @@ function loadMessage(type) {
     var ret = null;
     const message_array = [
 		   '東京東筑会メールマガジンの配信希望、誠にありがとうございます。' +
-		   'ご本人様確認のため、ご指定いただいた宛先に本登録のためのメールを送信しました。' +
-		   '東京東筑会からのお知らせメールを確認いただき、本登録を行ってください。',
+		   '宛先"{MAIL_ADDRESSS}"に本登録のためのメールを送信しました。' +
+		   'ご確認いただき、本登録を行ってください。'+
+		   'なお、メールが受信されない場合は、入力いただいたメールアドレス、もしくは' +
+		   'メールの受信設定をご確認ください。',
 
-		   'メールアドレスはすでにメルマガの宛先に登録されています。次回の配信をぜひお楽しみに！',
+		   'メールアドレス"{MAIL_ADDRESS}"はすでにメルマガの配信先として登録されています。' +
+		   '次回の配信をぜひお楽しみに！',
 
-		   'メルマガの登録が完了しました。次回の配信をぜひお楽しみに！',
+		   '登録が完了しました。次回の配信をぜひお楽しみに！',
 
-		   '東京東筑会からのお知らせメールを確認いただき、登録の解除を行ってください。',
+		   '宛先"{MAIL_ADDRESSS}"に手続きのためのメールを送信しました。' +
+		   'ご登録の解除を行ってください。',
 
-		   '指定のメールアドレスの登録はありませんでした。',
+		   'メールアドレス"{MAIL_ADDRESS}"の登録はありませんでした。',
 
-		   '東京東筑会メールマガジンの登録を解除しました。機会があればまたぜひよろしくお願いします！'
+		   '登録を解除しました。機会があればまたぜひよろしくお願いします！'
 
 			   ];
     switch (type) {
@@ -245,6 +250,7 @@ function onSubmitDelete(lambda) {
 		    if (data.message == 'data-nonexist') {
 			message = loadMessage('delete-data-nonexist');
 		    }
+		    message.replace('{MAIL_ADDRESS}',email);
 		    document.getElementById("thanks-to-body").textContent = message;
 		    $('#thanks').show();
 

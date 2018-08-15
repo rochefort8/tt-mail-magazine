@@ -8,13 +8,10 @@
 <!-- jquery/Bootstrap/Stripe -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="https://js.stripe.com/v3/"></script>
 <script src="javascripts/jquery.blockUI.js"></script>
 <script src="javascripts/validator.js"></script>
-<script src="javascripts/stripe.js"></script>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.288.0.min.js"></script>
-<script src="javascripts/base64.min.js"></script>
-
+<script src="javascripts/index.js"></script>
 <script type="text/javascript" src="//jpostal-1006.appspot.com/jquery.jpostal.js"></script>
 
 <!--[if lt IE 9]><script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -24,45 +21,31 @@
 </head>
 
 <body>
-<script>
-$(function () {
-    $('#zip').jpostal({
-        postcode : [
-            '#zip'
-        ],
-        address : {
-            '#pref' : '%3',
-            '#address' : '%4%5'
-        }
-    });
-});
-</script>
 
 <div class="container">
 
 <div class="jumbotron">
 <h2><p class="text-center">東京東筑会</p>
-<p class="text-center"><span id="fiscal-year">2018</span>メールマガジン登録・解除</p></h2>
+<p class="text-center">メールマガジン登録・解除</p></h2>
 </div>
 
-<!-- Fiscal Year -->
-<script>
-    var today = new Date();
-    var curMonth = today.getMonth();
-    var fiscalYear = "";
-    if (curMonth >= 3) { // Month starts from 0 to 11....
-        fiscalYear = today.getFullYear().toString();
-    } else {
-        fiscalYear = (today.getFullYear() - 1).toString() ;
-    }
-    var p = document.getElementById('fiscal-year');
-    p.innerHTML = fiscalYear ;
-</script>
-
-<!-- Payment form  -->
+<!-- Form  -->
 <form class="form-horizontal" role="form" id="registration-form" data-toggle="validator">
 
 <section class="contact">
+<h2> 手順</h2>
+<p>
+登録・解除いずれも、以下の2ステップにて行います。
+
+<p>1. 下記の登録フォームにメールアドレス、お名前等を入力し「仮登録」を行う</p>
+<p>2. 記入いただいたメールアドレス宛に配信されたメール内のURLより「本登録」を行う</p>
+
+成りすまし、メールアドレスの入力ミスなどを避けるため、一度仮登録をしていただき、入力いただいたメールアドレス宛に本登録用のメールを配信します。そのメール内に記載されたURLより本登録を行うことによって登録完了となります。<br>
+なお、確認メールが送信されてから、24時間経過しても本登録がされないと仮登録が無効となります。
+
+<span class="help-block">※お預かりしたメールアドレス等の情報は、本メールマガジンの配信にのみ利用します。その他の目的には一切使用いたしません。</span>
+<span class="help-block">※本フォームでは、情報は暗号化されて送信されます。安心してご利用ください。</span>
+
 <h2>登録</h2>
 
   <div class="form-group has-feedback">
