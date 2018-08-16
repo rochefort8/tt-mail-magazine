@@ -55,7 +55,7 @@ Action.doProvisionalRegistration = async function(email,last_name,first_name) {
     var key = await db.put(email,last_name,first_name);
 
     console.log("AAAAAAA");
-    console.log(url_baes);
+    console.log(url_base);
     ve.send(email,last_name,url_base + key);
     result.status = 'success';
     result.message = 'new';
