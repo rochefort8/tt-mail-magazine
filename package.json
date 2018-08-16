@@ -1,5 +1,5 @@
 {
-  "name": "tt-payment",
+  "name": "tt-mail-magazine",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -16,6 +16,6 @@
     "mailgun-js": "^0.20.0",
     "morgan": "~1.9.0",
     "sendgrid": "^1.9.2",
-    "stripe": "^4.18.0"
+    "@google-cloud/datastore": "1.3.4"
   }
 }
