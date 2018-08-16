@@ -14,6 +14,7 @@ const registrator = require('../server/registrator');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
   res.render('index', { title: 'Express' });
 });
 
@@ -22,6 +23,7 @@ router.get('/config', (req, res) => {
   res.json({
   stripePublishableKey: config.stripe.publishableKey,
   });
+
 });
 
 router.post('/command', async (req, res, next) => {

@@ -17,7 +17,7 @@ var Action = function () {
     }
 }
 
-const url_base='http://localhost:3000/index.html?key=';
+const url_base = req.protocol + '://' + req.headers.host + '/index.html?key=';
 
 Action.doProvisionalRegistration = async function(email,last_name,first_name) {
 

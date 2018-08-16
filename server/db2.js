@@ -16,8 +16,6 @@ var Database = function (params) {
     if (!(this instanceof Database)) {
 	return new Database(params);
     }
-
-
     this.put = async function(email,last_name,first_name,graduate,action) {
 	var now = this.getNow() ;
 	var key = this.generateKey(email + now);	
