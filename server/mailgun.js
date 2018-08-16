@@ -13,22 +13,34 @@ const mailgun = require('mailgun-js')({ apiKey, domain })
 
 const adminEmailAddress = config.admin.email;
 
-
-const mail_body = 'この度は、東京東筑会の2018年度年会費を納入いただきまして誠にありがとうございます。\n' +
-'東京東筑会では、卒業生の世代を超えた交流を目的とした懇親会や各種イベントを主催しております。\n' +
-'詳細は随時「東京東筑会ホームページ」に記載しておりますので、是非ともご覧ください。\n' +
-    '\n';
+const mail_body = '{toWhom}様\n'+
+'\n'+
+'東京東筑会メールマガジンの配信希望、誠にありがとうございます。\n' +
+'下記のURLをクリックいただきますと本登録が完了します。\n' +
+'\n'+
+'{URL}\n' +
+'\n'+
+'本メール到着後24時間日間以内に本登録の手続きを行ってください。\n'+
+'本登録の手続きを行わなかった場合は、再度仮登録が必要となります。\n'+
+'\n'+
+'-------------------------------------\n'+
+'  東京東筑会・事務局\n'+
+'  連絡先 : tt-official@tochikukai.com\n'+
+'-------------------------------------';
 
 var Email = function() {}
 
-    Email.send = function(sendTo,toWhom,url) {
+Email.send = function(sendTo,toWhom,url) {
+    
+    var body = mail_body.replace(/{URL}/g,url);
+    var body = body.replace(/{toWhom}/g,toWhom);
 
     console.log(apiKey);
     const data = {
 	from: '東京東筑会 <tt-official@tochikukai.com>',
 	to: sendTo,
-	subject: '[東京東筑会] 年会費支払いのご連絡',
-	text: toWhom + '様\n\n' + mail_body + url
+	subject: '[東京東筑会]メールマガジン本登録のご案内',
+	text: body
     };
     console.log(data.text);
 

@@ -27,52 +27,44 @@
 
 $(document).ready(function(){
 
-	
-	var key=getParam('registration');
+	/* Check "registration=.. */
+	var action='';
+	var key = getParam('registration');
 	if (key != null) {
-	$.post('/command', {
-		'action': 'do_registration',
-		    'key': key
-		    })
-	    // Assign handlers immediately after making the request,
-	    .done(function(data, textStatus, jqXHR) {
-
-		    var message = loadMessage('registration');
-		    document.getElementById("thanks-to-body").textContent = message;
-		    // $.unblockUI();
-		    $('#registration-form').hide();
-		    $('#delete-form').hide();
-		    $('#thanks').show();
-
-		})
-	    .fail(function(jqXHR, textStatus, errorThrown) {
-		    //		    $.unblockUI();
-		    var errorType = 'Error type : ' + jqXHR.responseJSON.type + '\n'; 
-		    var errorMessage = 'Message : ' + jqXHR.responseJSON.message;
-		    alert('支払いできませんでした。' + '\n' + errorType + errorMessage) ;
-		});
+	    action = 'do_registration';
+	} else {
+	    /* Check "delete=.. */
+	    key = getParam('delete');
+	    if (key != null) {
+		action = 'do_delete';
+	    }
 	}
 
-	key=getParam('delete');
 	if (key != null) {
-	$.post('/command', {
-		'action': 'do_delete',
+	    $('#registration-form').hide();
+	    $('#delete-form').hide();
+	    startBlockUI();
+
+	    $.post('/command', {
+		    'action': action,
 		    'key': key
 		    })
-	    // Assign handlers immediately after making the request,
-	    .done(function(data, textStatus, jqXHR) {
-		    var message = loadMessage('delete');
+		// Assign handlers immediately after making the request,
+		.done(function(data, textStatus, jqXHR) {
+		    var message = loadMessage(action);
 		    document.getElementById("thanks-to-body").textContent = message;
-		    // $.unblockUI();
 		    $('#registration-form').hide();
-		    $('#delete-form').hide();
 		    $('#thanks').show();
+		    stopBlockUI();
 		})
 	    .fail(function(jqXHR, textStatus, errorThrown) {
-		    //		    $.unblockUI();
 		    var errorType = 'Error type : ' + jqXHR.responseJSON.type + '\n'; 
 		    var errorMessage = 'Message : ' + jqXHR.responseJSON.message;
 		    alert('支払いできませんでした。' + '\n' + errorType + errorMessage) ;
+		    $('#thanks').hide();
+		    $('#registration-form').show();
+		    $('#delete-form').show();
+		    stopBlockUI();
 		});
 	}
 
@@ -131,6 +123,7 @@ function onSubmit(lambda) {
 		    "key1" : email
 		})
 	};
+	startBlockUI();
 
 	$.post('/command', {
 		    'action': 'request_registration',
@@ -143,7 +136,7 @@ function onSubmit(lambda) {
 
 	    // Assign handlers immediately after making the request,
 	    .done(function(data, textStatus, jqXHR) {
-		    // $.unblockUI();
+
 		    $('#registration-form').hide();
 		    $('#delete-form').hide();
 
@@ -154,16 +147,17 @@ function onSubmit(lambda) {
 		    if (data.message == 'data-exists') {
 			message = loadMessage('registration-data-exists');
 		    }
-		    message.replace('{MAIL_ADDRESS}',email);
+		    message = message.replace(/{MAIL_ADDRESS}/g,email);
 		    document.getElementById("thanks-to-body").textContent = message;
 		    $('#thanks').show();
-
+		    stopBlockUI();
 		})
 	    .fail(function(jqXHR, textStatus, errorThrown) {
-		    //		    $.unblockUI();
+
 		    var errorType = 'Error type : ' + jqXHR.responseJSON.type + '\n'; 
 		    var errorMessage = 'Message : ' + jqXHR.responseJSON.message;
 		    alert('支払いできませんでした。' + '\n' + errorType + errorMessage) ;
+		    stopBlockUI();
 		});
 
 	/*
@@ -179,19 +173,19 @@ function onSubmit(lambda) {
 function loadMessage(type) {
 
     var ret = null;
-    const message_array = [
+    var message_array = [
 		   '東京東筑会メールマガジンの配信希望、誠にありがとうございます。' +
-		   '宛先"{MAIL_ADDRESSS}"に本登録のためのメールを送信しました。' +
+		   '宛先"{MAIL_ADDRESS}"に本登録のためのメールを送信しました。' +
 		   'ご確認いただき、本登録を行ってください。'+
 		   'なお、メールが受信されない場合は、入力いただいたメールアドレス、もしくは' +
 		   'メールの受信設定をご確認ください。',
 
 		   'メールアドレス"{MAIL_ADDRESS}"はすでにメルマガの配信先として登録されています。' +
-		   '次回の配信をぜひお楽しみに！',
+		   '配信をぜひお楽しみに！',
 
-		   '登録が完了しました。次回の配信をぜひお楽しみに！',
+		   '登録が完了しました。配信をぜひお楽しみに！',
 
-		   '宛先"{MAIL_ADDRESSS}"に手続きのためのメールを送信しました。' +
+		   '宛先"{MAIL_ADDRESS}"に手続きのためのメールを送信しました。' +
 		   'ご登録の解除を行ってください。',
 
 		   'メールアドレス"{MAIL_ADDRESS}"の登録はありませんでした。',
@@ -206,7 +200,7 @@ function loadMessage(type) {
     case 'registration-data-exists':
 	ret = message_array[1] ;
 	break ;
-    case 'registration':
+    case 'do_registration':
 	ret = message_array[2] ;
 	break ;
     case 'delete-new':
@@ -215,7 +209,7 @@ function loadMessage(type) {
     case 'delete-data-nonexist':
 	ret = message_array[4] ;
 	break ;
-    case 'delete':
+    case 'do_delete':
 	ret = message_array[5] ;
 	break ;
     default:
@@ -232,6 +226,8 @@ function onSubmitDelete(lambda) {
 
 	var email = $('#email2').val() ;
 
+	startBlockUI();
+
 	$.post('/command', {
 		'action': 'request_delete',
 		    'email': email,
@@ -239,7 +235,7 @@ function onSubmitDelete(lambda) {
 
 	    // Assign handlers immediately after making the request,
 	    .done(function(data, textStatus, jqXHR) {
-		    // $.unblockUI();
+
 		    $('#registration-form').hide();
 		    $('#delete-form').hide();
 
@@ -250,13 +246,13 @@ function onSubmitDelete(lambda) {
 		    if (data.message == 'data-nonexist') {
 			message = loadMessage('delete-data-nonexist');
 		    }
-		    message.replace('{MAIL_ADDRESS}',email);
+		    message = message.replace(/{MAIL_ADDRESS}/g,email);
 		    document.getElementById("thanks-to-body").textContent = message;
 		    $('#thanks').show();
-
+		    stopBlockUI();
 		})
 	    .fail(function(jqXHR, textStatus, errorThrown) {
-		    //		    $.unblockUI();
+		    stopBlockUI();
 		    //			    var errorType = 'Error type : ' + jqXHR.responseJSON.type + '\n'; 
 		    //			    var errorMessage = 'Message : ' + jqXHR.responseJSON.message;
 		    //			    alert('支払いできませんでした。' + '\n' + errorType + errorMessage) ;
@@ -270,6 +266,25 @@ function onSubmitDelete(lambda) {
 	*/
     });
 }
+
+function startBlockUI() {
+    $.blockUI({ css: { 
+		border: 'none', 
+		    padding: '15px',
+		    backgroundColor: 'none',
+		    color: '#333', 
+		    '-webkit-border-radius': '10px', 
+		    '-moz-border-radius': '10px', 
+		    opacity: .8 
+		    },
+		message: $('#tallContent')} 
+	);
+}
+
+function stopBlockUI() {
+	$.unblockUI();
+}
+
 
 
 

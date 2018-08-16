@@ -24,7 +24,7 @@ var Registrator = function () {
 
 const url_base='http://localhost:3000/index.html?';
 
-Registrator.requestRegistration = async function(email,last_name,first_name) {
+Registrator.requestRegistration = async function(email,last_name,first_name,graduate) {
 
     var result = {
 	status:'',
@@ -50,13 +50,11 @@ Registrator.requestRegistration = async function(email,last_name,first_name) {
     console.log(entity);
 
     if (entity != null) {
-	var email = entity.email ;
-	var last_name = entity.last_name ;    
 	var key = entity.key ;    
 	console.log("Same key exist");
 	await db.delete(key);
     }
-    var key = await db.put(email,last_name,first_name,'register');
+    var key = await db.put(email,last_name,first_name,graduate,'register');
     ve.send(email,last_name,url_base + 'registration=' + key);
     result.status = 'success';
     result.message = 'new';
@@ -74,8 +72,9 @@ Registrator.doRegistration = async function(key) {
     if (entity != null) {
 	var email = entity.email ;
 	var last_name = entity.last_name ;
-	await email_service.addRecipient(email,last_name,"");
-	// async/await
+	var first_name = entity.first_name ;
+	var graduate = entity.graduate ;
+	await email_service.addRecipient(email,last_name,first_name,graduate);
 
 	await db.delete(entity.key);
 	result.status = 'success';
@@ -162,7 +161,7 @@ Registrator.handlePost = async function(req, res) {
     try {
 	switch (action) {
 	case 'request_registration':
-	    result = await this.requestRegistration(email,last_name,first_name);
+	    result = await this.requestRegistration(email,last_name,first_name,graduate);
 	    break;
 	case 'do_registration':
 	    result = await this.doRegistration(key);

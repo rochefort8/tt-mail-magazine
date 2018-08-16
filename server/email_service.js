@@ -15,15 +15,17 @@ var EmailService = function (apiKey) {
     }
 
     const contact = new sendgrid(apiKey);
-    const list_id='4707395'; // TT_Test list ID
-    
+    //    const list_id='4707395'; // TT_Test list ID
+    const list_id='4779581';
+
     this.getListId  = function() {
 	contact.lists.getAllLists(function(err,resp,body) {
 	    if (err) { return console.error(err); }
 	    for(var i = 0; i < resp.lists.length; i++){
 		list=resp.lists[i];
 
-		if (list.name == 'TT_Test') {
+		//		if (list.name == 'TT_Test') {
+		if (list.name == 'tt-mail-magazine') {
 		    console.log(list.id);
 		    return list.id ;
 		}
@@ -37,10 +39,11 @@ var EmailService = function (apiKey) {
 	var recipients = [{
 	    email : email,
 	    first_name : first_name,
-	    last_name  : last_name
+	    last_name  : last_name,
+	    full_name  : last_name + ' ' + first_name,
+	    graduate   : graduate
 	}];
 
-	console.log(recipients[0].email);
 	contact.recipients.addRecipients(recipients,function(err,resp) {
 	    if (err) { return console.error(err); }
 

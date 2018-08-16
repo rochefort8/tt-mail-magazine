@@ -17,7 +17,7 @@ var Database = function (params) {
     }
 
 
-    this.put = async function(email,last_name,first_name,action) {
+    this.put = async function(email,last_name,first_name,graduate,action) {
 	var now = this.getNow() ;
 	var key = this.generateKey(email + now);	
 	const datastore_key = datastore.key('list');
@@ -27,7 +27,7 @@ var Database = function (params) {
 		action:action,
 		last_name: last_name,
 		first_name:first_name,
-		graduate:'',
+		graduate:graduate,
 		email: email,
 		key:key,
 		created:now
