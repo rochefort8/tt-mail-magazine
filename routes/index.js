@@ -14,16 +14,18 @@ const registrator = require('../server/registrator');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
   res.render('index', { title: 'Express' });
 });
 
 // Expose the Stripe publishable key and other pieces of config via an endpoint.
 router.get('/config', (req, res) => {
+
+const url_base = req.protocol + '://' + req.headers.host + '/index.html?key=';
+console.log(url_base);
+
   res.json({
   stripePublishableKey: config.stripe.publishableKey,
   });
-
 });
 
 router.post('/command', async (req, res, next) => {
