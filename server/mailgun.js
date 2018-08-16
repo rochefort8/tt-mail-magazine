@@ -31,6 +31,7 @@ const mail_body = '{toWhom}様\n'+
 var Email = function() {}
 
 Email.send = function(sendTo,toWhom,url) {
+    console.log(url);
     
     var body = mail_body.replace(/{URL}/g,url);
     var body = body.replace(/{toWhom}/g,toWhom);

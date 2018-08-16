@@ -19,10 +19,6 @@ router.get('/', function(req, res, next) {
 
 // Expose the Stripe publishable key and other pieces of config via an endpoint.
 router.get('/config', (req, res) => {
-
-const url_base = req.protocol + '://' + req.headers.host + '/index.html?key=';
-console.log(url_base);
-
   res.json({
   stripePublishableKey: config.stripe.publishableKey,
   });
