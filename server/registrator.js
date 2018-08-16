@@ -14,6 +14,8 @@ const email_service = require('./email_service')(process.env.SENDGRID_API_KEY);
 const database = require('./db2');
 var  db = new database();
 
+var url_base = '';
+
 const ve = require('./mailgun');
 
 var Registrator = function () {
@@ -22,7 +24,7 @@ var Registrator = function () {
     }
 }
 
-const url_base = req.protocol + '://' + req.headers.host + '/index.html?key=';
+
 
 Registrator.requestRegistration = async function(email,last_name,first_name,graduate) {
 
@@ -55,7 +57,7 @@ Registrator.requestRegistration = async function(email,last_name,first_name,grad
 	await db.delete(key);
     }
     var key = await db.put(email,last_name,first_name,graduate,'register');
-    ve.send(email,last_name,url_base + 'registration=' + key);
+    ve.send(email,last_name,url_base + '?registration=' + key);
     result.status = 'success';
     result.message = 'new';
     return result;
@@ -122,7 +124,7 @@ Registrator.requestDelete = async function(email) {
 	await db.delete(key);
     }
     var key = await db.put(email,last_name,first_name,'delete');
-    ve.send(email,last_name,url_base + 'delete=' + key);
+    ve.send(email,last_name,url_base + '?delete=' + key);
     result.status = 'success';
     result.message = 'new';
     return result;
@@ -156,11 +158,12 @@ Registrator.doDelete = async function(key) {
 Registrator.handlePost = async function(req, res) {
 
     let {action,key,email,graduate,last_name,first_name} = req.body;
-    console.log(action);
+    url_base = req.protocol + '://' + req.headers.host + '/index.html';
 
     try {
 	switch (action) {
 	case 'request_registration':
+
 	    result = await this.requestRegistration(email,last_name,first_name,graduate);
 	    break;
 	case 'do_registration':
