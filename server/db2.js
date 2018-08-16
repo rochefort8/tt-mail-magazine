@@ -3,12 +3,13 @@
 const crypto = require('crypto');
 const Datastore = require('@google-cloud/datastore');
  
-// Your Google Cloud Platform project ID
 const projectId = 'tt-mail-magazine';
+const credentials = JSON.parse(process.env.GOOGLE_CLOUD_CREDENTIALS);
  
 // Creates a client
 const datastore = new Datastore({
 	projectId: projectId,
+	credentials:credentials
     });
 
 var Database = function (params) {
