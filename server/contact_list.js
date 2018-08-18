@@ -15,8 +15,9 @@ var ContactList = function (apiKey) {
     }
 
     const contact = new sendgrid_contact(apiKey);
-    //    const list_id='4707395'; // TT_Test list ID
-    const list_id='4812497';
+    const list_id='4707395'; // TT_Test list ID
+    // Test list
+    // const list_id='4812497';
 
     this.getListId  = function() {
 	contact.lists.getAllLists(function(err,resp,body) {
