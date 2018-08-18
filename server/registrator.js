@@ -118,8 +118,8 @@ Registrator.requestDelete = async function(email) {
 	console.log("Same key exist");
 	await db.delete(key);
     }
-    var key = await db.put(email,last_name,first_name,'delete');
-    ve.send('delete-request',email,last_name,url_base + '?delete=' + key);
+    var key = await db.put(email,'','','delete');
+    ve.send('delete-request',email,'',url_base + '?delete=' + key);
     result.status = 'success';
     result.message = 'new';
     return result;

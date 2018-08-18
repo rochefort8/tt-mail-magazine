@@ -245,11 +245,11 @@ var Contacts = function(apiUserOrKey, apiKeyOrOptions, options) {
     //Get Recipients Matching Search Criteria - GET
     searchRecipients: function(params, callback) {
       request({
-          uri: uri + "/recipients/" + "/search",
-          method: 'GET',
-          qs: {
-            params
-          }
+          uri: uri + "/recipients/" + "search?" + params,
+          method: 'GET'
+	  //          qs: {
+	  //		  params
+	  //          }
         },
         apiCallback(callback));
     }

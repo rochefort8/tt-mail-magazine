@@ -61,55 +61,41 @@ var ContactList = function (apiKey) {
     }
 
     this.deleteRecipient = function(email) {
-	var params = {
-	    list_id : list_id,
-	};
+	return new Promise(function (resolve,reject) {
+	    var param = 'email=' + email;
+	    contact.recipients.searchRecipients('email=' + email,function(err,resp,body) {
+	        if (err) { 
+		    console.error(err); 
+		    resolve(null);
+		} 
+		if (resp.recipient_count >= 1) {
+		    var recipient = resp.recipients[0] ;
+		    var id = [recipient.id];
 
-	contact.lists.getListRecipients(params,function(err,resp) {
-	    if (err) { return console.error(err); }
-	    recipients = resp.recipients ;
-
-	    for(var i = 0; i < recipients.length; i++){
-		recipient =  recipients[i] ;
-		if (email == recipient.email) {
-		    var ids = [recipient.id];
 		    console.log('Removing ' + email + '.id=' + recipient.id);		
-		    contact.recipients.deleteRecipients(ids,function(err,resp) {
-			if (err) { return console.error(err); }
+
+		    contact.recipients.deleteRecipients(id,function(err,resp) {
+		        if (err) { return console.error(err); }
 			console.log(resp);
-		    });
+			});
+		    resolve(recipient);
 		}
-	    }
-	    return null;
+		resolve(null);
+	    });
 	});
     }
 
     this.queryRecipient = async function(email) {
-	var params = {
-	    list_id : list_id,
-	};
-	var res=null;
-
 	return new Promise(function (resolve,reject) {
-
-	contact.lists.getListRecipients(params,function(err,resp) {
-		if (err) { 
-		    return console.error(err); 
-		}
-		if (resp.recipient_count == 0) {
+	    var param = 'email=' + email;
+	    contact.recipients.searchRecipients('email=' + email,function(err,resp,body) {
+	        if (err) { 
+		    console.error(err); 
 		    resolve(null);
-		    return ;
-		}
-		const recipients = resp.recipients ;
-		console.log(recipients);
-
-		for(var i = 0; i < recipients.length; i++){
-		    recipient =  recipients[i] ;
-		    if (email == recipient.email) {
-			resolve(recipient);
-			console.log(recipient);
-			return;
-		    }
+		} 
+		if (resp.recipient_count >= 1) {
+		    var recipient = resp.recipients[0] ;
+		    resolve(recipient);
 		}
 		resolve(null);
 	    });

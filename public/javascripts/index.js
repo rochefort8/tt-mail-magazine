@@ -60,7 +60,11 @@ $(document).ready(function(){
 	    .fail(function(jqXHR, textStatus, errorThrown) {
 		    var errorType = 'Error type : ' + jqXHR.responseJSON.type + '\n'; 
 		    var errorMessage = 'Message : ' + jqXHR.responseJSON.message;
-		    alert('支払いできませんでした。' + '\n' + errorType + errorMessage) ;
+		    if (action == 'do_registration') {
+			alert('登録できませんでした。お手数ですが仮登録から行ってください。');
+		    } else {
+			alert('解除できませんでした。お手数ですが フォーム入力から行ってください。');
+		    }
 		    $('#thanks').hide();
 		    $('#registration-form').show();
 		    $('#delete-form').show();
