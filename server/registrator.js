@@ -9,7 +9,7 @@
 require('dotenv').config();
 const crypto = require('crypto');
 
-const email_service = require('./email_service')(process.env.SENDGRID_API_KEY);
+const contact_list = require('./contact_list')(process.env.SENDGRID_API_KEY);
 //const database = require('./db');
 const database = require('./db2');
 var  db = new database();
@@ -20,11 +20,9 @@ const ve = require('./mailgun');
 
 var Registrator = function () {
     if (!(this instanceof Registrator)) {
-	return new EmailService(apiKey);
+	return new Registrator(apiKey);
     }
 }
-
-
 
 Registrator.requestRegistration = async function(email,last_name,first_name,graduate) {
 
@@ -33,7 +31,7 @@ Registrator.requestRegistration = async function(email,last_name,first_name,grad
 	message:''
     };
     var is_exist='';
-    await email_service.queryRecipient(email)
+    await contact_list.queryRecipient(email)
     .then(function (item) {
 	    if (item != null) {
 		is_exist='y';
@@ -57,7 +55,7 @@ Registrator.requestRegistration = async function(email,last_name,first_name,grad
 	await db.delete(key);
     }
     var key = await db.put(email,last_name,first_name,graduate,'register');
-    ve.send(email,last_name,url_base + '?registration=' + key);
+    ve.send('registration-request',email,last_name,url_base + '?registration=' + key);
     result.status = 'success';
     result.message = 'new';
     return result;
@@ -76,8 +74,8 @@ Registrator.doRegistration = async function(key) {
 	var last_name = entity.last_name ;
 	var first_name = entity.first_name ;
 	var graduate = entity.graduate ;
-	await email_service.addRecipient(email,last_name,first_name,graduate);
-
+	await contact_list.addRecipient(email,last_name,first_name,graduate);
+	ve.send('registration-success',email);
 	await db.delete(entity.key);
 	result.status = 'success';
 
@@ -97,7 +95,7 @@ Registrator.requestDelete = async function(email) {
 	message:''
     };
     var is_exist='';
-    await email_service.queryRecipient(email)
+    await contact_list.queryRecipient(email)
     .then(function (item) {
 	    if (item != null) {
 		is_exist='y';
@@ -116,15 +114,12 @@ Registrator.requestDelete = async function(email) {
     console.log(entity);
 
     if (entity != null) {
-	var email = entity.email ;
-	var last_name = entity.last_name ;    
-	var first_name = entity.first_name ;    
 	var key = entity.key ;    
 	console.log("Same key exist");
 	await db.delete(key);
     }
     var key = await db.put(email,last_name,first_name,'delete');
-    ve.send(email,last_name,url_base + '?delete=' + key);
+    ve.send('delete-request',email,last_name,url_base + '?delete=' + key);
     result.status = 'success';
     result.message = 'new';
     return result;
@@ -139,13 +134,11 @@ Registrator.doDelete = async function(key) {
     var entity = await db.get(key);
     console.log(entity);
     if (entity != null) {
-	var email = entity.email ;
-	
-	await email_service.deleteRecipient(email);
-
+	var email = entity.email ;	
+	await contact_list.deleteRecipient(email);
+	ve.send('delete-success',email);
 	await db.delete(entity.key);
 	result.status = 'success';
-
     } else {
 	console.log('Key ' + key + ' not found.');
 	// return error
