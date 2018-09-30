@@ -15,7 +15,9 @@
     "heroku-ssl-redirect": "0.0.4",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
+    "mailchimp-api-v3": "^1.12.0",
     "mailgun-js": "^0.20.0",
+    "md5": "^2.2.1",
     "morgan": "~1.9.0",
     "sendgrid": "^1.9.2"
   }

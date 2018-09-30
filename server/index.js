@@ -1,14 +1,5 @@
 require('dotenv').config();
 
-const sendgrid_contact = require("./lib/sendgrid-contacts");
-const contact = new sendgrid_contact(process.env.SENDGRID_API_KEY););
-
-contact.lists.getAllLists(function(err,resp,body) {
-	if (err) { return console.error(err); }
-	console.log(resp);
-    });
-}
-
 exports.handler = function (event, context) {
     //console.log('Received event:', JSON.stringify(event, null, 2));
 
@@ -23,9 +14,6 @@ exports.handler = function (event, context) {
     key = event.param1;
     last_name = event.param2
     first_name=event.param3 ;
-
-
-    
 
     switch (command) {
     case "add":

@@ -6,10 +6,11 @@
  *
  * ======================================================================== */
 
-require('dotenv').config();
+const config = require('../config');
 const crypto = require('crypto');
 
-const contact_list = require('./contact_list')(process.env.SENDGRID_API_KEY);
+const contact_list = require('./contacts')(config.email.mailchimp_apiKey);
+
 //const database = require('./db');
 const database = require('./db2');
 var  db = new database();
@@ -30,6 +31,7 @@ Registrator.requestRegistration = async function(email,last_name,first_name,grad
 	status:'',
 	message:''
     };
+
     var is_exist='';
     await contact_list.queryRecipient(email)
     .then(function (item) {
