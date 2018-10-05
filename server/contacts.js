@@ -17,8 +17,7 @@ var ContactList = function (apiKey) {
 
     const mailchimp = new Mailchimp(this.api_key);
 
-    //    const list_id='806e3d6a72';
-    const list_id='b847116ed9';
+    const list_id='03a6dc0401';
 
     this.addRecipient = function(email,last_name,first_name,graduate) {
 
