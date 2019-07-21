@@ -4,7 +4,7 @@
   "private": true,
   "engines": {
     "node": "9.x"
-  }
+  },
   "dependencies": {
     "@google-cloud/datastore": "^1.4.1",
     "aws-sdk": "^2.290.0",
