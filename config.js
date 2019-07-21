@@ -37,7 +37,8 @@ module.exports = {
 
   email: {
 	mailgun_apiKey:process.env.MAILGUN_API_KEY,
-	mailchimp_apiKey:process.env.MAILCHIMP_API_KEY,
+  mailchimp_apiKey:process.env.MAILCHIMP_API_KEY,
+  sendgrid_apiKey:process.env.SENDGRID_API_KEY,
   },
 
   admin: {

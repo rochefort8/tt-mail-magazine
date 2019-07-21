@@ -17,7 +17,8 @@ var  db = new database();
 
 var url_base = '';
 
-const ve = require('./mailgun');
+//const ve = require('./mailgun');
+const ve = require('./sendmail');
 
 var Registrator = function () {
     if (!(this instanceof Registrator)) {

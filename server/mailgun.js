@@ -10,6 +10,9 @@ const config = require('../config');
 const apiKey = config.email.mailgun_apiKey;
 const domain = 'sandboxa1d8ed7105c14aec90268d0af5f93b8e.mailgun.org';
 const mailgun = require('mailgun-js')({ apiKey, domain })
+const utils = require('./utils');
+const sendgrid   = require('sendgrid')(config.email.sendgrid_apiKey);
+const email      = new sendgrid.Email();
 
 const adminEmailAddress = config.admin.email;
 
@@ -89,6 +92,7 @@ Email.send = function(type,sendTo,toWhom,url) {
     return this._send(sendTo,subject,body);
 }
 
+/*
 Email._send = function(sendTo,subject,body) {
     
     console.log(apiKey);
@@ -103,6 +107,30 @@ Email._send = function(sendTo,subject,body) {
 	    if (err) { return console.error(err) }
 	    console.log(body)
 	})
+}
+*/
+
+Email._send = function(sendTo,subject,body) {
+	var from       = "tt-official@tochikukai.com";
+	var fiscalYear = utils.getCureentFiscalYear();
+
+	email.setTos(sendTo);
+	email.setFrom(from);
+	email.fromname = '東京東筑会';
+	email.setSubject('D');
+	email.setText('D');
+	email.setHtml('<strong> </strong>');
+//	email.addSubstitution('%toWhom%', toWhom);
+	email.addSubstitution('%fiscal-year%', fiscalYear);
+	email.addSubstitution('%subject%', subject);
+	email.addSubstitution('%body%', body);
+
+	email.addFilter('templates','template_id','be6f86db-d13c-43df-953a-4e1f12afce3f');
+
+	sendgrid.send(email, function(err, json) {
+		if (err) { return console.error(err); }
+		console.log(json);
+    });
 }
 
 Email.sendToAdmin = function(toWhom,email,phone,address) {
