@@ -36,10 +36,12 @@ Registrator.requestRegistration = async function(email,last_name,first_name,grad
     var is_exist='';
     await contact_list.queryRecipient(email)
     .then(function (item) {
-	    if (item != null) {
+	if (item != null) {
+	    if (item.status == 'subscribed') {
 		is_exist='y';
-	    } 
-	})
+	    }
+	} 
+    })
     .catch(function (error) {
 	    console.log(error);
 	});
@@ -77,7 +79,23 @@ Registrator.doRegistration = async function(key) {
 	var last_name = entity.last_name ;
 	var first_name = entity.first_name ;
 	var graduate = entity.graduate ;
-	await contact_list.addRecipient(email,last_name,first_name,graduate);
+
+	var is_exist='';
+	await contact_list.queryRecipient(email)
+	    .then(function (item) {
+		if (item != null) {
+		    is_exist='y';
+		} 
+	    })
+	    .catch(function (error) {
+		console.log(error);
+	    });
+	if (is_exist == '') {	
+	    await contact_list.addRecipient(email,last_name,first_name,graduate);
+	} else {
+	    await contact_list.updateRecipient(email,last_name,first_name,graduate);	    
+	}
+	
 	ve.send('registration-success',email);
 	await db.delete(entity.key);
 	result.status = 'success';

@@ -8,10 +8,12 @@
 
 const config = require('../config');
 const utils = require('./utils');
-const sendgrid   = require('sendgrid')(config.email.sendgrid_apiKey);
-const email      = new sendgrid.Email();
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(config.email.sendgrid_apiKey);
 
 const adminEmailAddress = config.admin.email;
+const from_address 	= 'tt-official@tochikukai.com'
+const from_name 	= '東京東筑会' ;
 
 var Email = function() {}
 
@@ -46,33 +48,25 @@ Email.send = function(type,sendTo,toWhom,url) {
 		console.log('No such type:', + type);
 		return ;
     }
-    return this._send(template_id,sendTo,toWhom,url);
+	// Configure the substitution tag wrappers globally
+	sgMail.setSubstitutionWrappers('%', '%');
+	const msg = {
+	    to: sendTo,
+	    from: {
+		email : from_address,
+		name  : from_name
+	    },
+	    subject: 'D',		/* Unused */
+	    text: 'D',			/* Unused */
+	    html: '<p>D</p>',	/* Unused */
+	    templateId: template_id,
+	    substitutions: {
+		toWhom: toWhom,/* Full name, overwritten on template string */
+		url:url        /* URL */
+	    }
+	}
+	return sgMail.send(msg);    
 }
 
-Email._send = function(template_id,sendTo,toWhom,url) {
-	var from       = "tt-official@tochikukai.com";
-	var fiscalYear = utils.getCureentFiscalYear();
-
-	email.setTos(sendTo);
-	email.setFrom(from);
-	email.fromname = '東京東筑会';
-	email.setSubject('D');
-	email.setText('D');
-	email.setHtml('<strong> </strong>');
-	email.addSubstitution('%toWhom%', toWhom);
-	email.addSubstitution('%url%', url);
-	email.addSubstitution('%fiscal-year%', fiscalYear);
-
-	email.addFilter('templates','template_id',template_id);
-
-	sendgrid.send(email, function(err, json) {
-		if (err) { return console.error(err); }
-		console.log(json);
-    });
-}
-
-Email.sendToAdmin = function(toWhom,email,phone,address) {
-
-}
 
 module.exports = Email;
